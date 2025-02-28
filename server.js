@@ -1,13 +1,28 @@
 const express = require("express");
 const path = require("path");
 const sqlite3 = require("sqlite3");
-const database = require("./public/db/db_functions.js")
+const database = require("./public/db/db_functions.js");
+const { json } = require("stream/consumers");
 
 const app = express();
 const web_path = path.join(__dirname, "public");
 
 const insert_post = 'INSERT INTO Posts(PostDate, PostTitle, OwnerId) VALUES(?, ?, ?) RETURNING PostId';
 const insert_post_details = 'INSERT INTO PostDetails(PostText, PostId) VALUES(?, ?) RETURNING PostDetailId';
+const select_all_posts = 
+    `SELECT UserName, PostDate, PostTitle, PostText, a.PostId 
+     FROM Posts a, PostDetails b, Users c 
+     WHERE a.Postid = b.PostId
+     AND a.OwnerId = ?
+     ORDER BY a.PostId`;
+const select_post = 
+    `SELECT UserName, PostDate, PostTitle, PostText, a.PostId 
+     FROM Posts a, PostDetails b, Users c 
+     WHERE a.PostId = b.PostId
+     AND a.OwnerId = c.UserId
+     AND c.UserName = ?
+     AND a.PostId = ?
+     ORDER BY a.PostId`;
 
 app.use(express.static(web_path));
 console.log(web_path);
@@ -18,10 +33,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
+    console.log("Main Page accessed.");
     res.sendFile(path.join(web_path, 'Main.html'));
 });
 
-app.post("/insert", function (req, res) {
+app.post("/api/insert", function (req, res) {
     console.log("Post");
     console.log(req.body); 
     try {
@@ -30,7 +46,7 @@ app.post("/insert", function (req, res) {
             .then((value) => {
                 console.log(value);
                 // Insert Post Details
-                database.execute(db, insert_post_details,[req.body["postBody"], value.rows.PostId])
+                database.execute(db, insert_post_details,[req.body["postBody"], value.row.PostId])
                     .then((value) => console.log(value));
             });
         res.status(201).send(req.body);
@@ -42,11 +58,21 @@ app.post("/insert", function (req, res) {
 });
 app.listen(5500, () => console.log("Server is running on Port 5500"));  
 
-// app.get("/", (req, res) => {
-//     // res.status(200).json({
-//     //   blogs,
-//     // });
-// });
+app.get("/api/posts", (req, res) => {
+    console.log('Get');
+    // Query all posts
+    try {
+        const userId = req.query.userid || '1';
+        const postId = req.query.postid || null;
+        
+        database.execute(db, select_all_posts, [Number(userId)]).then((value) => {
+            res.status(201).json(value);
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error querying post.')
+    }
+});
 
 const db = new sqlite3.Database('public/db/blogs.db', (err) => {
     if (err) {

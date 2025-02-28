@@ -8,25 +8,39 @@
 </head>
 
 <body>
-    <script src="/scripts/script.js"></script>
-    <div class="header-container">
-        <header>
-            <h1>
-                Japan Life Blog
-            </h1>
-        </header>
-    </div>
+    <main>
+        <div class="header-container">
+            <header>
+                <h1>
+                    Japan Life Blogs
+                </h1>
+            </header>
+        </div>
+        
+        <ul style="list-style:none;padding-left:0px" id="ul-posts">
+            <!-- <li style="border:solid;border-width:1px;">
+                <header style="margin-left:5px">
+                    <h2>Post Title</h2>
+                    <p style="margin-top:-10px;margin-left:295px;position:fixed">Date and User</p>
+                </header>
+                <br>
+                <section style="margin-left:5px"><p>Post Body</p></section>
+                <section style="margin-left:5px"><h4>Comments Section</h4></section>
+            </li> -->
+        </ul>
+    </main>
 
-    <div class="posts-container">
-        <p>
-            Blog posts
-        </p>
-    </div>
-    
+    <!--        
+        <div class="posts-container">
+            <p>
+                Blog posts
+            </p>
+        </div>
+    -->
     <div class="create-posts-container">
-        <button id="post-form" onclick="location.href='/FormCreatePost.html'">Create Post</button>
+        <button id="post-create" onclick="location.href='/CreatePost.html'">Create Post</button>
     </div>
-
+    <script src="/scripts/mainScript.js"></script>
 </body>
 
 </html>

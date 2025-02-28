@@ -7,7 +7,7 @@ create.addEventListener('click', async function() {
     const userId = 1;
 
     let body = { type: 'INSERT', postTitle, postBody, curDate, userId };
-    const response = await fetch("/insert", {
+    const response = await fetch(`/api/insert`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' }

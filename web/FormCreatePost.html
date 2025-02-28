@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+</head>
+
+<body>
+
+    <div class="header-container">
+        <header>
+            <h1>Create Post</h1>
+        </header>
+    </div>
+
+    <div class="form-container">
+        <div class="title-container">
+            <label id="title-label">Title: </label>
+            <br>
+            <input type="text" id="title-textbox" name="title" style="width:350px">
+        </div>
+
+        <br>
+
+        <div class="body-container">
+            <label id="body-label">Body: </label>
+            <br>
+            <div contenteditable="true" style="border:solid;border-width:1px;width:355px;height:350px;" class="content-container">
+            </div>
+            <!--<textarea type="textarea" id="title-textbox" name="title" style="width:350px;height:350px;resize:none"></textarea> -->
+        </div>
+    </div>
+    
+    <br><br>
+    
+    <div class="buttons-container">
+        <button id="back" style="width:60px;position:fixed">Back</button>
+        <button id="create" style="width:60px;margin-left:295px;position:fixed">Create</button>
+    </div>
+
+</body>
+
+</html>

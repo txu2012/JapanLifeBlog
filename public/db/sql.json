@@ -1,0 +1,25 @@
+{
+    "Create" : {
+        "CreateUsersTable": "CREATE TABLE IF NOT EXISTS Users(UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT NOT NULL, UserEmail TEXT NOT NULL, CreatedDate TEXT, UNIQUE(UserName))",
+
+        "CreatePostsTable": "CREATE TABLE IF NOT EXISTS Posts(PostId INTEGER PRIMARY KEY AUTOINCREMENT, PostDate TEXT NOT NULL, PostTitle TEXT NOT NULL, OwnerId INTEGER, FOREIGN KEY (OwnerId) REFERENCES Users(UserId))",
+
+        "CreatePostDetailsTable": "CREATE TABLE IF NOT EXISTS PostDetails(PostDetailId INTEGER PRIMARY KEY AUTOINCREMENT, PostText TEXT NOT NULL, PostId INTEGER, FOREIGN KEY (PostId) REFERENCES Posts(PostId))",
+
+        "CreateCommentsTable": "CREATE TABLE IF NOT EXISTS Comments(CommentId INTEGER PRIMARY KEY AUTOINCREMENT, Comment TEXT NOT NULL, CommentDate TEXT NOT NULL, CommenterId INTEGER, FOREIGN KEY (CommenterId) REFERENCES Users(UserId))"
+    },
+
+    "Insert": {
+        "InsertUser": "INSERT INTO Users(UserName, UserEmail, CreatedDate) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT UserName FROM Users WHERE UserName = ?)",
+
+        "InsertPost": "INSERT INTO Posts(PostDate, PostTitle, OwnerId) VALUES(?, ?, ?) RETURNING PostId",
+
+        "InsertPostDetails": "INSERT INTO PostDetails(PostText, PostId) VALUES(?, ?) RETURNING PostDetailId"
+    },
+
+    "Select": {
+        "SelectAllPosts": "SELECT UserId, UserName, PostDate, PostTitle, PostId FROM Posts a, Users b WHERE a.OwnerId = b.UserId AND b.UserId = ? ORDER BY a.PostId",
+
+        "SelectPost": "SELECT UserName, PostDate, PostTitle, PostText, a.PostId FROM Posts a, PostDetails b, Users c WHERE a.PostId = b.PostId AND a.OwnerId = c.UserId AND c.UserId = ? AND a.PostId = ? ORDER BY a.PostId"
+    }
+}

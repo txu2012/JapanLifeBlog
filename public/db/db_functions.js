@@ -25,7 +25,7 @@ export const execute = async (db, sql, params = []) => {
                 console.log(err.message);
                 reject(err);
             }
-            console.log('Successfully created table.');
+            // console.log('Successfully created table.');
             resolve();
         });
     });

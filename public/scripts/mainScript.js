@@ -1,3 +1,12 @@
+// Reload upon entering
+(function () {
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    };
+})();
+
 document.addEventListener("DOMContentLoaded", async function() {
     console.log('Executed on page load');
 
@@ -32,7 +41,7 @@ function processPosts(posts) {
         let li = document.createElement('li');
 
         let a = document.createElement('a');
-        a.href = `/Post.html?userid=${row["UserId"]}&postid=${row["PostId"]}`;
+        a.href = `/web/Post.html?userid=${row["UserId"]}&postid=${row["PostId"]}`;
         a.innerText = row["PostTitle"];
 
         li.appendChild(a);
@@ -41,8 +50,4 @@ function processPosts(posts) {
     }
 
     return li_posts;
-}
-
-function moveToPost() {
-
 }

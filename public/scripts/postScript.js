@@ -1,25 +1,69 @@
+let postData;
+
 document.addEventListener("DOMContentLoaded", async function() {
     console.log('Executed on page load');
     const urlParams = new URLSearchParams(window.location.search);
 
     const userId = urlParams.get('userid');
     const postId = urlParams.get('postid');
-    let body = { type: 'SELECT', userId };
-    const response = await fetch(`/api/posts?userid=${userId}&postid=${postId}`, {
+
+    const responses = await Promise.all(
+    [
+        fetch(`/api/posts?userid=${userId}&postid=${postId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => res.json())
+        ,
+        fetch(`/api/posts?userid=${userId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => res.json())
+    ]);
+
+    // process data
+    let content = createPost(responses[0]);  
+
+    if (content !== undefined) {
+        const post = document.querySelector('.main-container');
+        post.appendChild(content);
+
+        let data = {
+            CurrentPostId: postId,
+            UserId: userId,
+            PostIds: responses[1]
+        }
+        postData = data;
+    }
+});
+
+async function changePost(next) {
+    console.log(postData);
+    let postId = postData["CurrentPostId"];
+    let idx = postData["PostIds"].findIndex((obj) => obj.PostId == postId);
+
+    if (next === true && idx < postData["PostIds"].length - 1 && idx > -1) {
+        idx++;
+    }
+    else if (next === false && idx > 0) {
+        idx--;  
+    }
+    else {
+        return;
+    }
+    postId = postData["PostIds"][idx]["PostId"];
+    console.log(postId);
+
+    const response = await fetch(`/api/posts?userid=${postData["UserId"]}&postid=${postId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
-    const json = await response.json();
-    console.log(json);
+    const jsonPost = await response.json();
 
-    // process data
-    let content = createPost(json);  
+    const post = document.querySelector('.main-container');
+    post.replaceChildren(createPost(jsonPost));
 
-    if (content.length > 0) {
-        const post = document.querySelector('#main-post');
-        post.appendChild(createPost(content));
-    }
-})
+    postData["CurrentPostId"] = postId;
+}
 
 function createPost(contentJson) {
     let article = document.createElement('article');

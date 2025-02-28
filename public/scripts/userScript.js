@@ -18,18 +18,55 @@ btnSignUp.addEventListener('click', async function() {
     const userName = document.querySelector("#signup-username").value
     const email = document.querySelector("#signup-email").value;
     const password = document.querySelector("#signup-password").value;
+    let body = 
+    { 
+        type: 'Insert', 
+        commands: 
+        [ 
+            {
+                sql: "InsertUser", 
+                params: [userName, email, password] 
+            }
+        ] 
+    };
 
-    console.log(userName, email, password);
-    // let body = { type: 'User', userName, email, password };
-    // const response = await fetch(`/api/insert`, {
-    //     method: 'POST',
-    //     body: JSON.stringify(body),
-    //     headers: { 'Content-Type': 'application/json' }
-    // });
-    // const json = await response.text();
+    const response = await fetch(`/api/insert`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' }
+    });
+    const json = await response.text();
 });
 
 let btnLogin = document.querySelector("#btn-login");
 btnLogin.addEventListener('click', async function() {
+    const userName = document.querySelector("#login-username").value;
+    const password = document.querySelector("#login-password").value;
+    let body = 
+    { 
+        type: 'Select', 
+        commands: 
+        [ 
+            {
+                sql: "SelectUser", 
+                params: [userName, password] 
+            }
+        ] 
+    };
 
+    const response = await fetch(`/api/user`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+        if (result.message === 'SUCCESS') {
+            alert('Login successful.');
+            window.location.href = '/web/Main.html'
+        }
+        else {
+            alert(result.message);
+        }
+    });
 });

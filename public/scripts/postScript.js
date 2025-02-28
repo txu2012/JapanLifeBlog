@@ -9,35 +9,35 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     const responses = await Promise.all(
     [
-        fetch(`/api/posts?userid=${userId}&postid=${postId}`, {
+        fetch(`/api/posts?q=SelectPost&userid=${userId}&postid=${postId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         }).then(res => res.json())
         ,
-        fetch(`/api/posts?userid=${userId}`, {
+        fetch(`/api/posts?q=SelectAllPosts&userid=${userId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         }).then(res => res.json())
     ]);
 
     // process data
-    let content = createPost(responses[0]);  
+    let content = createPost(responses[0].posts);  
 
     if (content !== undefined) {
         const post = document.querySelector('.main-container');
         post.appendChild(content);
 
-        let data = {
+        let data = 
+        {
             CurrentPostId: postId,
             UserId: userId,
-            PostIds: responses[1]
+            PostIds: responses[1].posts
         }
         postData = data;
     }
 });
 
 async function changePost(next) {
-    console.log(postData);
     let postId = postData["CurrentPostId"];
     let idx = postData["PostIds"].findIndex((obj) => obj.PostId == postId);
 
@@ -51,16 +51,15 @@ async function changePost(next) {
         return;
     }
     postId = postData["PostIds"][idx]["PostId"];
-    console.log(postId);
 
-    const response = await fetch(`/api/posts?userid=${postData["UserId"]}&postid=${postId}`, {
+    const response = await fetch(`/api/posts?q=SelectPost&userid=${postData["UserId"]}&postid=${postId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
     const jsonPost = await response.json();
 
     const post = document.querySelector('.main-container');
-    post.replaceChildren(createPost(jsonPost));
+    post.replaceChildren(createPost(jsonPost.posts));
 
     postData["CurrentPostId"] = postId;
 }
@@ -68,7 +67,6 @@ async function changePost(next) {
 function createPost(contentJson) {
     let article = document.createElement('article');
     for (let row of contentJson) {
-        console.log(row);
         article.appendChild(createPostTitle(row["PostTitle"], row["UserName"], row["PostDate"]));
         article.appendChild(createPostBody(row["PostText"]));
         article.appendChild(createComments(""));

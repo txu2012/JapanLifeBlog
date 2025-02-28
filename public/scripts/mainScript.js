@@ -12,15 +12,14 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     const userId = 1;
     let body = { type: 'SELECT', userId };
-    const response = await fetch(`/api/posts?userid=${userId}`, {
+    const response = await fetch(`/api/posts?q=SelectAllPosts&userid=${userId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
-    console.log(json);
 
     // process data
-    let content = processPosts(json);  
+    let content = processPosts(json.posts);  
 
     if (content.length > 0) {
         const list = document.querySelector('#ul-posts');
@@ -35,8 +34,6 @@ function processPosts(posts) {
     if (posts.length <= 0) return li_posts;
 
     for(let row of posts) {
-        console.log(row);
-
         // Create li
         let li = document.createElement('li');
 

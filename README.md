@@ -3,7 +3,7 @@ Simple project for learning html and javascript. This uses a node server to comm
 # JapanLifeBlog
 
 ## Setup
-Once the repository is cloned, create a node environment in the console within the base folder using:
+Once the repository is cloned, create a node environment in the console within the base folder using: 
 `npm init`
 
 ## Packages

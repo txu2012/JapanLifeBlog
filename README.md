@@ -1,3 +1,5 @@
+Simple project for learning html and javascript. This uses a node server to communicate for requests to send/receive data to a local sqlite database for learning purposes.
+
 # JapanLifeBlog
 
 ## Setup

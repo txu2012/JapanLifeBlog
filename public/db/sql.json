@@ -13,7 +13,7 @@
 
     "InsertPostDetail": "INSERT INTO PostDetails(PostText, PostId) VALUES(?, ?) RETURNING PostDetailId",
 
-    "SelectAllPosts": "SELECT UserId, UserName, PostDate, PostTitle, PostId FROM Posts a, Users b WHERE a.OwnerId = b.UserId AND b.UserId = ? ORDER BY a.PostId",
+    "SelectAllPosts": "SELECT UserId, UserName, PostDate, PostTitle, PostId FROM Posts a, Users b WHERE a.OwnerId = b.UserId AND b.UserId = ? ORDER BY a.PostId DESC",
 
     "SelectPost": "SELECT UserName, PostDate, PostTitle, PostText, a.PostId FROM Posts a, PostDetails b, Users c WHERE a.PostId = b.PostId AND a.OwnerId = c.UserId AND c.UserId = ? AND a.PostId = ? ORDER BY a.PostId",
 

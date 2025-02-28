@@ -22,9 +22,17 @@ document.addEventListener("DOMContentLoaded", async function() {
     let content = processPosts(json.posts);  
 
     if (content.length > 0) {
-        const list = document.querySelector('#ul-posts');
+        const postList = document.querySelector('#ul-posts');
         for (let post of content) {
-            list.appendChild(post);
+            postList.appendChild(post);
+        }
+
+        let postListElements = list.querySelectorAll('.li-post');
+        for(let i = 0; i < postListElements.length; i++) {
+            postListElements[i].addEventListener('mouseenter', (event) => {
+                postList.querySelector('.active').classList.remove('active');
+                postListElements[i].classList.add('active');
+            });
         }
     }
 })
@@ -36,7 +44,8 @@ function processPosts(posts) {
     for(let row of posts) {
         // Create li
         let li = document.createElement('li');
-
+        li.classList.add('li-post');
+        
         let a = document.createElement('a');
         a.href = `/web/Post.html?userid=${row["UserId"]}&postid=${row["PostId"]}`;
         a.innerText = row["PostTitle"];

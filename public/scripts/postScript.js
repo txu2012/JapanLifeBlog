@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         {
             CurrentPostId: postId,
             UserId: userId,
-            PostIds: responses[1].posts
+            PostIds: responses[1].posts.reverse()
         }
         postData = data;
     }

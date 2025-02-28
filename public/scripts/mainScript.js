@@ -30,11 +30,12 @@ function processPosts(posts) {
 
         // Create li
         let li = document.createElement('li');
-        li.style = 'border:solid;border-width:1px;width:650px';
 
         let a = document.createElement('a');
-        a.href = `/CreatePost.html?username=${posts["UserName"]}&postid=${posts["PostId"]}`;
-        a.data
+        a.href = `/Post.html?userid=${row["UserId"]}&postid=${row["PostId"]}`;
+        a.innerText = row["PostTitle"];
+
+        li.appendChild(a);
         // Append to list
         li_posts.push(li);
     }

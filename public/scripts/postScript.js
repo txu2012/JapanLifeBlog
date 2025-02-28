@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     console.log('Executed on page load');
     const urlParams = new URLSearchParams(window.location.search);
 
-    const userName = urlParams.get('username');
+    const userId = urlParams.get('userid');
     const postId = urlParams.get('postid');
     let body = { type: 'SELECT', userId };
-    const response = await fetch(`/api/posts?username=${userName}&postid=${postId}`, {
+    const response = await fetch(`/api/posts?userid=${userId}&postid=${postId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     console.log(json);
 
     // process data
-    let content = processPosts(json);  
+    let content = createPost(json);  
 
     if (content.length > 0) {
         const post = document.querySelector('#main-post');
@@ -23,10 +23,12 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 function createPost(contentJson) {
     let article = document.createElement('article');
-
-    article.appendChild(createPostTitle(contentJson["PostTitle"], contentJson["UserName"], contentJson["PostDate"]));
-    article.appendChild(createPostBody(contentJson["PostText"]));
-    article.appendChild(createComments(""));
+    for (let row of contentJson) {
+        console.log(row);
+        article.appendChild(createPostTitle(row["PostTitle"], row["UserName"], row["PostDate"]));
+        article.appendChild(createPostBody(row["PostText"]));
+        article.appendChild(createComments(""));
+    }
 
     return article;
 }

@@ -19,14 +19,16 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     console.log("Main Page accessed.");
-    res.sendFile(path.join(web_path, 'web/Main.html'));
+    res.sendFile(path.join(web_path, 'web/User.html'));
 });
 
 app.post("/api/insert", function (req, res) {
     console.log("POST Request");
     try {
+        var d = new Date();
+        let curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
         // Insert Post Header
-        database.execute(db, Insert["InsertPost"], [req.body["curDate"], req.body["postTitle"], req.body["userId"]])
+        database.execute(db, Insert["InsertPost"], [curDate, req.body["postTitle"], req.body["userId"]])
             .then((value) => {
                 // Insert Post Details
                 database.execute(db, Insert["InsertPostDetails"],[req.body["postBody"], value.row.PostId]);

@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.21.2",
+    "http": "^0.0.1-security",
     "sqlite3": "^5.1.7"
-  },
-  "type": "module"
+  }
 }

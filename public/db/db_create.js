@@ -28,13 +28,14 @@ const createCommentsTable =
         CommenterId INTEGER,
         FOREIGN KEY (CommenterId) REFERENCES Users(UserId))`;
 
-
+const insertUser = `INSERT INTO Users(UserName, UserEmail, CreatedDate) VALUES(?, ?, ?)`;
 
 try {
     await database.execute(db, createUsersTable);
     await database.execute(db, createPostsTable);
     await database.execute(db, createPostDetailsTable);
     await database.execute(db, createCommentsTable);
+    await database.execute(db, insertUser, ['Inuwan', 'nongshim12@gmail.com', '2025-02-25']);
 } catch (error) {
     console.log(error);
 }

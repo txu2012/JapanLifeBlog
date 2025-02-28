@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
     <div class="header-container">
         <header>
             <h1>Create Post</h1>
@@ -16,18 +15,18 @@
     </div>
 
     <div class="form-container">
-        <div class="title-container">
-            <label id="title-label">Title: </label>
+        <div class="post-title-container">
+            <label id="post-title-label">Title: </label>
             <br>
-            <input type="text" id="title-textbox" name="title" style="width:350px">
+            <input type="text" id="post-title-textbox" name="post-title" style="width:350px">
         </div>
 
         <br>
 
-        <div class="body-container">
-            <label id="body-label">Body: </label>
+        <div class="post-body-container">
+            <label id="post-body-label">Body: </label>
             <br>
-            <div contenteditable="true" style="border:solid;border-width:1px;width:355px;height:350px;" class="content-container">
+            <div contenteditable="true" style="border:solid;border-width:1px;width:355px;height:350px;" id="post-content-container">
             </div>
             <!--<textarea type="textarea" id="title-textbox" name="title" style="width:350px;height:350px;resize:none"></textarea> -->
         </div>
@@ -36,10 +35,11 @@
     <br><br>
     
     <div class="buttons-container">
-        <button id="back" style="width:60px;position:fixed">Back</button>
-        <button id="create" style="width:60px;margin-left:295px;position:fixed">Create</button>
+        <button id="btn-post-back" style="width:60px;position:fixed">Back</button>
+        <button id="btn-post-create" style="width:60px;margin-left:295px;position:fixed">Create</button>
     </div>
 
+    <script src="/scripts/createPostScript.js"></script>
 </body>
 
 </html>

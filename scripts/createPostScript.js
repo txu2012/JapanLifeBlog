@@ -1,3 +1,6 @@
+import sqlite3 from "sqlite3";
+import * as database from "../db/db_create.js"
+
 let contentTarget = document.getElementById("content-container");                           // Target our DIV's DOM node.
 
 contentTarget.onpaste = (e) => {                                                      // When there's an paste event on our target DIV:
@@ -10,3 +13,7 @@ contentTarget.onpaste = (e) => {                                                
    reader.onload = (e) => contentTarget.innerHTML = `<img src="${e.target.result}">`; // ... set its onLoad to render the event target's payload
    reader.readAsDataURL(cbPayload[0].getAsFile());                                    // ... then read in the pasteboard image data as Base64
 };
+
+// const db = new sqlite3.Database("db/blogs.db");
+// const sql = "";
+// database.execute(db, sql);

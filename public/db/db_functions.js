@@ -1,6 +1,4 @@
-import sqlite3 from "sqlite3";
-
-export const execute = async (db, sql, params = []) => {
+const execute = async (db, sql, params = []) => {
     if (params && params.length > 0) {
         return new Promise((resolve, reject) => {
             if (sql.split(' ')[0] == 'SELECT') {
@@ -29,3 +27,5 @@ export const execute = async (db, sql, params = []) => {
         });
     });
 };
+
+module.exports = execute;

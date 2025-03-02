@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const sqlite3 = require("sqlite3");
-const database = require("./db_functions.js");
+const execute = require("./db_functions.js");
 const { json } = require("stream/consumers");
 const fs = require('fs');
 const SQL = require("./sql.json")
@@ -28,8 +28,7 @@ app.post('/api/user', (req, res) => {
     // Query User
     try {
         if (req.body['commands'].length > 0) {
-            const cmds = req.body['commands'];
-            database.execute(db, SQL[cmds[0].sql], cmds[0].params[0])
+            execute(db, SQL[cmds[0].sql], cmds[0].params[0])
                 .then((value) => {
                     if (value.length > 0) {
                         if (value[0]['Password'] === cmds[0].params[1]) {
@@ -62,7 +61,7 @@ app.get('/api/posts', (req, res) => {
         const params = [...(userId ? [userId] : []), ...(postId ? [postId] : [])]
         console.log(params);
         if (query !== null) {
-            database.execute(db, SQL[query], params).then((value) => {
+            execute(db, SQL[query], params).then((value) => {
                 res.status(201).json({message:"SUCCESS", posts: value});
             });
         }
@@ -82,10 +81,10 @@ app.post("/api/insert", function (req, res) {
         if (req.body['commands'].length > 0) {
             const cmds = req.body['commands'];
             console.log('Command received.', cmds);
-            database.execute(db, SQL[cmds[0].sql], [curDate, ...cmds[0].params])
+            execute(db, SQL[cmds[0].sql], [curDate, ...cmds[0].params])
                 .then((value) => {
                     if (cmds.length > 1) {
-                        database.execute(db, SQL[cmds[1].sql],[...cmds[1].params, value.row.PostId]);
+                        execute(db, SQL[cmds[1].sql],[...cmds[1].params, value.row.PostId]);
                     }
                 });
             res.status(201).json({message:"SUCCESS"});
@@ -121,11 +120,11 @@ const db = new sqlite3.Database('public/db/blogs.db', (err) => {
     } 
     else {  
       try {
-          database.execute(db, SQL['CreateUsersTable']);
-          database.execute(db, SQL['CreatePostsTable']);
-          database.execute(db, SQL['CreatePostDetailsTable']);
-          database.execute(db, SQL['CreateCommentsTable']);
-          database.execute(db, SQL['InsertUser'], ['2025-02-25', 'Admin', 'admin@gmail.com', 'admin', 'Admin']);
+        execute(db, SQL['CreateUsersTable']);
+        execute(db, SQL['CreatePostsTable']);
+        execute(db, SQL['CreatePostDetailsTable']);
+        execute(db, SQL['CreateCommentsTable']);
+        execute(db, SQL['InsertUser'], ['2025-02-25', 'Admin', 'admin@gmail.com', 'admin', 'Admin']);
       } 
       catch (error) {
           console.log(error);

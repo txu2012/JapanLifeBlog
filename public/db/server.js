@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Parse URL-encoded form data
 app.use(express.urlencoded({ extended: true }));
-app.listen(5500, () => console.log('Server is running on Port 5500: http://localhost:5500/'));  
+app.listen(5500, () => console.log('Server is running on Port 5500: http://localhost:5500/web/User.html'));  
 
 app.get('/', (req, res) => {
     console.log('User Page accessed.');
@@ -28,6 +28,7 @@ app.post('/api/user', (req, res) => {
     // Query User
     try {
         if (req.body['commands'].length > 0) {
+            const cmds = req.body['commands'];
             execute(db, SQL[cmds[0].sql], cmds[0].params[0])
                 .then((value) => {
                     if (value.length > 0) {

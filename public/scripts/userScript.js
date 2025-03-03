@@ -34,8 +34,17 @@ btnSignUp.addEventListener('click', async function() {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+        if (result.message === 'SUCCESS') {
+            alert('Signup successful.');
+            window.location.href = '/web/Main.html'
+        }
+        else {
+            alert(result.message);
+        }
     });
-    const json = await response.text();
 });
 
 let btnLogin = document.querySelector("#btn-login");

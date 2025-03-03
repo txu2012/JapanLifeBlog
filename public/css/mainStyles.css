@@ -72,7 +72,7 @@ body {
     padding-left: 15px;
     padding-right: 15px;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
 }
 .main-buttons-container button {
     width: 80px;

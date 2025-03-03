@@ -1,21 +1,25 @@
 {
     "CreateUsersTable": "CREATE TABLE IF NOT EXISTS Users(UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT NOT NULL, UserEmail TEXT NOT NULL, Password TEXT NOT NULL, CreatedDate TEXT, UNIQUE(UserName))",
 
-    "CreatePostsTable": "CREATE TABLE IF NOT EXISTS Posts(PostId INTEGER PRIMARY KEY AUTOINCREMENT, PostDate TEXT NOT NULL, PostTitle TEXT NOT NULL, OwnerId INTEGER, FOREIGN KEY (OwnerId) REFERENCES Users(UserId))",
+    "CreatePostsTable": "CREATE TABLE IF NOT EXISTS Posts(PostId INTEGER PRIMARY KEY AUTOINCREMENT, PostDate TEXT NOT NULL, PostTitle TEXT NOT NULL, UserId INTEGER, FOREIGN KEY (UserId) REFERENCES Users(UserId))",
 
     "CreatePostDetailsTable": "CREATE TABLE IF NOT EXISTS PostDetails(PostDetailId INTEGER PRIMARY KEY AUTOINCREMENT, PostText TEXT NOT NULL, PostId INTEGER, FOREIGN KEY (PostId) REFERENCES Posts(PostId))",
 
-    "CreateCommentsTable": "CREATE TABLE IF NOT EXISTS Comments(CommentId INTEGER PRIMARY KEY AUTOINCREMENT, Comment TEXT NOT NULL, CommentDate TEXT NOT NULL, CommenterId INTEGER, FOREIGN KEY (CommenterId) REFERENCES Users(UserId))",
+    "CreateCommentsTable": "CREATE TABLE IF NOT EXISTS Comments(CommentId INTEGER PRIMARY KEY AUTOINCREMENT, Comment TEXT NOT NULL, CommentDate TEXT NOT NULL, UserId INTEGER, PostId INTEGER, FOREIGN KEY (PostId) REFERENCES Posts(PostId))",
 
     "InsertUser": "INSERT INTO Users(CreatedDate, UserName, UserEmail, Password) SELECT ?, ?, ?, ? WHERE NOT EXISTS (SELECT UserName FROM Users WHERE UserName = ?)",
 
-    "InsertPost": "INSERT INTO Posts(PostDate, PostTitle, OwnerId) VALUES(?, ?, ?) RETURNING PostId",
+    "InsertPost": "INSERT INTO Posts(PostDate, PostTitle, UserId) VALUES(?, ?, ?) RETURNING PostId",
 
     "InsertPostDetail": "INSERT INTO PostDetails(PostText, PostId) VALUES(?, ?) RETURNING PostDetailId",
 
-    "SelectAllPosts": "SELECT UserId, UserName, PostDate, PostTitle, PostId FROM Posts a, Users b WHERE a.OwnerId = b.UserId AND b.UserId = ? ORDER BY a.PostId DESC",
+    "InsertComment": "INSERT INTO Comments(Comment, CommentDate, PostId) VALUES(?, ?, ?) RETURNING CommentId",
 
-    "SelectPost": "SELECT UserName, PostDate, PostTitle, PostText, a.PostId FROM Posts a, PostDetails b, Users c WHERE a.PostId = b.PostId AND a.OwnerId = c.UserId AND c.UserId = ? AND a.PostId = ? ORDER BY a.PostId",
+    "SelectAllPosts": "SELECT a.UserId, UserName, PostDate, PostTitle, PostId FROM Posts a, Users b WHERE a.UserId = b.UserId AND b.UserId = ? ORDER BY a.PostId DESC",
 
-    "SelectUser": "SELECT UserName, Password FROM Users WHERE UserName = ?"
+    "SelectPost": "SELECT UserName, PostDate, PostTitle, PostText, a.PostId FROM Posts a, PostDetails b, Users c WHERE a.PostId = b.PostId AND a.UserId = c.UserId AND c.UserId = ? AND a.PostId = ? ORDER BY a.PostId",
+
+    "SelectUser": "SELECT UserName, Password FROM Users WHERE UserName = ?",
+
+    "SelectComments": "SELECT UserName, Comment, CommentDate FROM Users a, Posts b, Comments c WHERE b.PostId = c.PostId AND a.UserId = c.UserId AND b.PostId = ? ORDER BY c.CommentId DESC"
 }

@@ -30,7 +30,12 @@ app.post('/api/user', (req, res) => {
         if (req.body['commands'].length > 0) {
             const cmds = req.body['commands'];
             execute(db, SQL[cmds[0].sql], cmds[0].params[0])
+                .catch((error) => {
+                    console.log(`Error ${error}`);
+                    res.status(500).json({message:"No user found."});
+                })
                 .then((value) => {
+                    console.log('Test');
                     if (value.length > 0) {
                         if (value[0]['Password'] === cmds[0].params[1]) {
                             res.status(201).json({message:"SUCCESS"});
@@ -46,6 +51,7 @@ app.post('/api/user', (req, res) => {
         }
     }
     catch (err) {
+        console.log("Error");
         console.log(err);
         res.status(500).send('Error querying user.')
     }
@@ -70,6 +76,26 @@ app.get('/api/posts', (req, res) => {
     catch (error) {
         console.log(error);
         res.status(500).json({message:"Error grabbing post"})
+    }
+});
+
+app.get('/api/comments', (req, res) => {
+    console.log('GET Request');
+    try {
+        const query = req.query.q || null;
+        const postId = req.query.postid || null;
+        const params = [...(postId ? [postId] : [])]
+        console.log(query, params);
+
+        if (query !== null && postId !== null) {
+            execute(db, SQL[query], params).then((value) => {
+                res.status(201).json({message:"SUCCESS", comments: value});
+            });
+        }
+    }
+    catch(error) {
+        console.log(error);
+        res.status(500).json({message: "Error grabbing comments"});
     }
 });
 

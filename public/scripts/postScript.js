@@ -12,9 +12,12 @@ document.addEventListener("DOMContentLoaded", async function() {
         fetch(`/api/posts?q=SelectPost&userid=${userId}&postid=${postId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
-        }).then(res => res.json())
-        ,
+        }).then(res => res.json()),
         fetch(`/api/posts?q=SelectAllPosts&userid=${userId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => res.json()),
+        fetch(`/api/comments?q=SelectComments&postid=${postId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         }).then(res => res.json())
@@ -22,13 +25,14 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // process data
     let content = createPost(responses[0].posts);  
+    let postComments = responses[2]
 
     if (content !== undefined) {
         const post = document.querySelector('.post-container');
         post.appendChild(content);
 
         const comments = document.querySelector('.post-comments');
-        comments.appendChild(createComments(""));
+        comments.appendChild(createComments());
 
         let data = 
         {
@@ -64,7 +68,7 @@ async function changePost(next) {
     const post = document.querySelector('.post-container');
     post.replaceChildren(createPost(jsonPost.posts));
 
-    const comments = document.querySelector('.post-comments');
+    const comments = document.querySelector('.post-display-comments');
     comments.replaceChildren(createComments(""));
     
     postData["CurrentPostId"] = postId;
@@ -115,14 +119,14 @@ function createPostBody(postBody) {
 }
 
 function createComments(comments) {
-    let section = document.createElement('section');
-    section.classList.add('post-comments');
+    let div = document.createElement('div');
+    div.classList.add('display-comments');
     //section.style = 'margin-left:5px';
 
     let h4 = document.createElement('h4');
     h4.innerText = 'Comments';
 
-    section.appendChild(h4);
+    div.appendChild(h4);
 
-    return section;
+    return div;
 }

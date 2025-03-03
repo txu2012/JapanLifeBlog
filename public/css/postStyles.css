@@ -47,12 +47,23 @@ body {
     padding-right: 15px;
 }
 
+.post-buttons-container > button {
+    width: 80px;
+    height: 30px;
+}
+
 .post-comments {
     padding: 15px;
 }
 
 .post-comments > h4 {
     text-align: center;
+    padding-bottom: 20px;
+}
+
+.display-comments > h4 {
+    text-align: center;
+    justify-content: right;
 }
 
 .post-buttons-container {
@@ -61,7 +72,29 @@ body {
     justify-content: space-between;
 }
 
-.post-buttons-container > button {
-    width: 80px;
+.post-create-comments {
+    border: solid 1px;
+    width: 100%;
+    height: 200px;
+}
+
+.post-create-comments > #comment-input {
+    padding: 5px;
+    height: 150px;
+    overflow: auto;
+    overflow-x: hidden;
+    outline: none;
+}
+
+.btn-comments {
+    display: flex;
+    padding-right: 15px;
+    padding-top: 5px;
+    justify-content: right;
+    margin-right: auto;
+}
+
+.btn-comments > button {
+    width: 100px;
     height: 30px;
 }

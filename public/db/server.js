@@ -75,8 +75,9 @@ app.get('/api/posts', (req, res) => {
 app.post("/api/insert", function (req, res) {
     console.log("POST Request");
     try {
-        var d = new Date();
-        let curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        var d = new Date(new Date().getTime() - new Date().getTimezoneOffset()*60*1000);
+        // let curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        let curDate = d.toISOString().substr(0, 19).replace('T', ' ');
 
         if (req.body['commands'].length > 0) {
             const cmds = req.body['commands'];

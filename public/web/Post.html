@@ -5,16 +5,19 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Post</title>
+        <link rel="stylesheet" href="/css/postStyles.css">
     </head>
 
     <body>
-        <main class="main-container">
-        </main>
+        <div class="post-bkgr">
+            <main class="post-container"></main>
 
-        <div class="post-buttons-container">
-            <button onclick="location.href='/web/Main.html'" id="post-return" style="width:80px;position:fixed">Return</button>
-            <button onclick="changePost(false)" id="post-previous" style="width:80px;margin-left:160px;position:fixed">Previous</button>
-            <button onclick="changePost(true)" id="post-next" style="width:80px;margin-left:320px;position:fixed">Next</button>
+            <div class="post-buttons-container">
+                <button onclick="changePost(false)" id="post-previous">Previous</button>
+                <button onclick="location.href='/web/Main.html'" id="post-return">Return</button>
+                <button onclick="changePost(true)" id="post-next">Next</button>
+            </div>
+            <div class="post-comments"></div>
         </div>
 
         <script src="/../scripts/postScript.js"></script>

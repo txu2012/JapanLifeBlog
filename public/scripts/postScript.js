@@ -24,8 +24,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     let content = createPost(responses[0].posts);  
 
     if (content !== undefined) {
-        const post = document.querySelector('.main-container');
+        const post = document.querySelector('.post-container');
         post.appendChild(content);
+
+        const comments = document.querySelector('.post-comments');
+        comments.appendChild(createComments(""));
 
         let data = 
         {
@@ -58,9 +61,12 @@ async function changePost(next) {
     });
     const jsonPost = await response.json();
 
-    const post = document.querySelector('.main-container');
+    const post = document.querySelector('.post-container');
     post.replaceChildren(createPost(jsonPost.posts));
 
+    const comments = document.querySelector('.post-comments');
+    comments.replaceChildren(createComments(""));
+    
     postData["CurrentPostId"] = postId;
 }
 
@@ -69,36 +75,39 @@ function createPost(contentJson) {
     for (let row of contentJson) {
         article.appendChild(createPostTitle(row["PostTitle"], row["UserName"], row["PostDate"]));
         article.appendChild(createPostBody(row["PostText"]));
-        article.appendChild(createComments(""));
     }
-
     return article;
 }
 
 function createPostTitle(postTitle, userName, postDate) {
-    let header = document.createElement('header');
-    header.style = 'margin-left:5px';
+    //let header = document.createElement('header');
+    //header.style = 'margin-left:5px';
 
+    let div = document.createElement('div');
+    div.classList.add('post-header');
     let h2 = document.createElement('h2');
     h2.innerText = postTitle;
+    div.appendChild(h2);
 
+    let div2 = document.createElement('div');
     let p = document.createElement('p');
-    p.innerText = `${postDate} ${userName}`;
-    p.style = 'margin-top:-10px;margin-left:510px;position:relative';
+    p.innerText = `${userName} ${postDate}`;
+    //p.style = 'margin-top:-10px;margin-left:510px;position:relative';
+    div.appendChild(p);
 
-    header.appendChild(h2);
-    header.appendChild(p);
+    //header.appendChild(div);
 
-    return header;
+    return div;
 }
 
 function createPostBody(postBody) {
     let section = document.createElement('section');
-    section.style = 'margin-left:5px';
+    section.classList.add('post-body');
+    //section.style = 'margin-left:5px';
 
     let p = document.createElement('p');
     p.innerText = postBody;
-    p.style = 'width:800px;text-wrap:wrap';
+    //p.style = 'width:800px;text-wrap:wrap';
 
     section.appendChild(p);
 
@@ -107,7 +116,8 @@ function createPostBody(postBody) {
 
 function createComments(comments) {
     let section = document.createElement('section');
-    section.style = 'margin-left:5px';
+    section.classList.add('post-comments');
+    //section.style = 'margin-left:5px';
 
     let h4 = document.createElement('h4');
     h4.innerText = 'Comments';

@@ -50,7 +50,18 @@ function processPosts(posts) {
         a.href = `/web/Post.html?userid=${row["UserId"]}&postid=${row["PostId"]}`;
         a.innerText = row["PostTitle"];
 
+        let div = document.createElement('div');
+        let date = document.createElement('a');
+        date.innerText = row["PostDate"];
+        let user = document.createElement('a');
+        user.innerText = row["UserName"];
+        
+        div.appendChild(user);
+        div.appendChild(date);
+
         li.appendChild(a);
+        li.appendChild(div);
+
         // Append to list
         li_posts.push(li);
     }

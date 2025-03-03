@@ -1,7 +1,6 @@
 const create = document.querySelector('#btn-post-create');
 create.addEventListener('click', async function() {
     var d = new Date();
-    let curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
     const postTitle = document.getElementById("post-title-textbox").value;
     const postBody = document.getElementById("post-content-container").innerText;
     const userId = 1;

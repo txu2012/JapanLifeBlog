@@ -5,40 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
+    <link rel="stylesheet" href="/css/createStyles.css">
 </head>
 
 <body>
-    <div class="header-container">
-        <header>
-            <h1>Create Post</h1>
-        </header>
-    </div>
-
-    <div class="form-container">
-        <div class="post-title-container">
-            <label id="post-title-label">Title: </label>
-            <br>
-            <input type="text" id="post-title-textbox" name="post-title" style="width:350px">
-        </div>
-
-        <br>
-
-        <div class="post-body-container">
-            <label id="post-body-label">Body: </label>
-            <br>
-            <div contenteditable="true" style="border:solid;border-width:1px;width:355px;height:350px;" id="post-content-container">
+    <div class="create-bkgr">
+        <div class="create-main">
+            <div class="create-header">
+                <header>
+                    <h1>Create Post</h1>
+                </header>
             </div>
-            <!--<textarea type="textarea" id="title-textbox" name="title" style="width:350px;height:350px;resize:none"></textarea> -->
+            
+            <div class="create-form">
+                <div class="post-title-container">
+                    <label id="post-title-label">Title: </label>
+                    <br>
+                    <input type="text" id="post-title-textbox" name="post-title">
+                </div>
+                
+                <br>
+
+                <div class="post-body-container">
+                    <label id="post-body-label">Body: </label>
+                    <br>
+                    <div contenteditable="true" id="post-content-container">
+                    </div>
+                    <!--<textarea type="textarea" id="title-textbox" name="title" style="width:350px;height:350px;resize:none"></textarea> -->
+                </div>
+            </div>
+            
+            <div class="create-buttons-container">
+                <button id="btn-post-create">Create</button>
+                <button id="btn-post-back" onclick="location.href='/web/Main.html'">Return</button>
+            </div>
         </div>
     </div>
-    
-    <br><br>
-    
-    <div class="create-buttons-container">
-        <button id="btn-post-back" onclick="location.href='/web/Main.html'" style="width:80px;position:fixed">Return</button>
-        <button id="btn-post-create" style="width:80px;margin-left:295px;position:fixed">Create</button>
-    </div>
-
+        
     <script src="/../scripts/createPostScript.js"></script>
 </body>
 

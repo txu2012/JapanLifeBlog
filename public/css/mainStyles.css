@@ -9,15 +9,22 @@ body {
 	background:#dde7f1;
 }
 
-.main-content {
+.main-bkgr {
     position: absolute;
-    top: 50%;
+    top: 0%;
     left: 50%;
-    transform: translate(-50%, -50%);
+	box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.08);
+    transform: translate(-50%, 0%);
     width: 95%;
+    height: 100%;
     max-width: 800px;
     background: #fff;
-	box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.08);
+}
+
+.main-content {
+    position: relative;
+    background: #fff;
+    width: 100%;
 }
 
 .main-header {
@@ -31,14 +38,30 @@ body {
 
 .main-list-posts > ul {
     list-style: none;
+    height: 98%;
 }
 
 .main-list-posts > ul > li {
+    display: flex;
     padding: 10px;
     border: 1px solid;
     width: 100%;
     max-width: 800px;
     background-color: lightgrey;
+    height: 98%;
+}
+
+.main-list-posts > ul > li > a {
+    font-size: 18px;
+}
+
+.main-list-posts > ul > li > div {
+    margin-left: auto;
+    font-size: 12px;
+}
+
+.main-list-posts > ul > li > div > a:first-child {
+    margin-right: 5px;
 }
 
 .main-list-posts > ul > li:hover {

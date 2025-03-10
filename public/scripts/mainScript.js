@@ -22,15 +22,16 @@ document.addEventListener("DOMContentLoaded", async function() {
     let content = processPosts(json.posts);  
 
     if (content.length > 0) {
-        const postList = document.querySelector('#ul-posts');
+        let postList = document.querySelector('#ul-posts');
         for (let post of content) {
             postList.appendChild(post);
         }
 
-        let postListElements = list.querySelectorAll('.li-post');
+        let postListElements = postList.querySelectorAll('.li-post');
         for(let i = 0; i < postListElements.length; i++) {
             postListElements[i].addEventListener('mouseenter', (event) => {
-                postList.querySelector('.active').classList.remove('active');
+                let elems =  postList.querySelector('.active');
+                if (elems) elems.classList.remove('active');
                 postListElements[i].classList.add('active');
             });
         }

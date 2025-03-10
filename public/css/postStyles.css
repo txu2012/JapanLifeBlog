@@ -64,11 +64,6 @@ body {
     padding-bottom: 20px;
 }
 
-/* .display-comments > h3 {
-    text-align: center;
-    justify-content: right;
-} */
-
 .post-buttons-container {
     padding: 15px;
     display: flex;

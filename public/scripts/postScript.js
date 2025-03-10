@@ -1,11 +1,10 @@
 let postData;
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get('userid');
+const postId = urlParams.get('postid');
 
 document.addEventListener("DOMContentLoaded", async function() {
     console.log('Executed on page load');
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const userId = urlParams.get('userid');
-    const postId = urlParams.get('postid');
 
     const responses = await Promise.all(
     [
@@ -25,14 +24,18 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // process data
     let content = createPost(responses[0].posts);  
-    let postComments = responses[2]
+    let postComments = responses[2].comments;
+    console.log(postComments);
 
     if (content !== undefined) {
         const post = document.querySelector('.post-container');
         post.appendChild(content);
 
-        const comments = document.querySelector('.post-comments');
-        comments.appendChild(createComments());
+        let cmt_list = createComments(postComments); 
+        const comment_list = document.querySelector('#ul-comments');
+        for (let cmt of cmt_list) {
+            comment_list.appendChild(cmt);
+        }
 
         let data = 
         {
@@ -45,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 async function changePost(next) {
-    let postId = postData["CurrentPostId"];
+    let newPostId = postData["CurrentPostId"];
     let idx = postData["PostIds"].findIndex((obj) => obj.PostId == postId);
 
     if (next === true && idx < postData["PostIds"].length - 1 && idx > -1) {
@@ -57,21 +60,9 @@ async function changePost(next) {
     else {
         return;
     }
-    postId = postData["PostIds"][idx]["PostId"];
+    newPostId = postData["PostIds"][idx]["PostId"];
 
-    const response = await fetch(`/api/posts?q=SelectPost&userid=${postData["UserId"]}&postid=${postId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    });
-    const jsonPost = await response.json();
-
-    const post = document.querySelector('.post-container');
-    post.replaceChildren(createPost(jsonPost.posts));
-
-    const comments = document.querySelector('.post-display-comments');
-    comments.replaceChildren(createComments(""));
-    
-    postData["CurrentPostId"] = postId;
+    window.location.href = `/web/Post.html?userid=${postData["UserId"]}&postid=${newPostId}`;
 }
 
 function createPost(contentJson) {
@@ -84,9 +75,6 @@ function createPost(contentJson) {
 }
 
 function createPostTitle(postTitle, userName, postDate) {
-    //let header = document.createElement('header');
-    //header.style = 'margin-left:5px';
-
     let div = document.createElement('div');
     div.classList.add('post-header');
     let h2 = document.createElement('h2');
@@ -96,10 +84,7 @@ function createPostTitle(postTitle, userName, postDate) {
     let div2 = document.createElement('div');
     let p = document.createElement('p');
     p.innerText = `${userName} ${postDate}`;
-    //p.style = 'margin-top:-10px;margin-left:510px;position:relative';
     div.appendChild(p);
-
-    //header.appendChild(div);
 
     return div;
 }
@@ -107,11 +92,9 @@ function createPostTitle(postTitle, userName, postDate) {
 function createPostBody(postBody) {
     let section = document.createElement('section');
     section.classList.add('post-body');
-    //section.style = 'margin-left:5px';
 
     let p = document.createElement('p');
     p.innerText = postBody;
-    //p.style = 'width:800px;text-wrap:wrap';
 
     section.appendChild(p);
 
@@ -119,14 +102,102 @@ function createPostBody(postBody) {
 }
 
 function createComments(comments) {
-    let div = document.createElement('div');
-    div.classList.add('display-comments');
-    //section.style = 'margin-left:5px';
+    let li_comments = []
+    if (comments.length <= 0) return li_comments;
 
-    let h4 = document.createElement('h4');
-    h4.innerText = 'Comments';
+    for (let row of comments) {
+        // Create li
+        let li = document.createElement('li');
+        li.classList.add('li-comment');
 
-    div.appendChild(h4);
+        // Full comment
+        let div_cmt_whole = document.createElement('div');
 
-    return div;
+        // Header
+        let div_cmt_header = document.createElement('div');
+        div_cmt_header.classList.add('div-comment-header');
+        
+        let h4_name = document.createElement('h4');
+        h4_name.innerText = row['UserName'];
+        
+        let p_date = document.createElement('p');
+        p_date.innerText = row['CommentDate'];
+
+        div_cmt_header.appendChild(h4_name);
+        div_cmt_header.appendChild(p_date);
+
+        // Add break line
+        let br = document.createElement('br');
+
+        // Body
+        let div_cmt_body = document.createElement('div');
+        div_cmt_body.classList.add('div-comment-body');
+
+        let p_body = document.createElement('p');
+        p_body.innerText = row['Comment'];
+
+        div_cmt_body.appendChild(p_body);
+
+        // Dividing line
+        let hr = document.createElement('hr');
+        hr.classList.add('hr-solid');
+
+        div_cmt_whole.appendChild(div_cmt_header);
+        div_cmt_whole.appendChild(br);
+        div_cmt_whole.appendChild(div_cmt_body);
+        div_cmt_whole.appendChild(hr);
+
+        li.appendChild(div_cmt_whole);
+
+        li_comments.push(li);
+    }
+
+    return li_comments;
 }
+
+const comment = document.querySelector('#btn-post-comment');
+comment.addEventListener('click', async function() {
+    let success = false;
+    const commentBody = document.getElementById('comment-input').value;
+
+    let body = {
+        type: 'Insert',
+        commands:
+        [
+            {
+                sql: 'InsertComment',
+                params: [ commentBody, postId, userId ]
+            }
+        ]
+    };
+
+    const response = await fetch('/api/insert', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+        if (result.message === 'SUCCESS') {
+            success = true;
+            document.getElementById('comment-input').value = "";
+        }
+    });    
+
+    if (success) {
+        let cmt_response = await fetch(`/api/comments?q=SelectComments&postid=${postId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => res.json());
+
+        const comment_list = document.querySelector('#ul-comments');
+        while(comment_list.firstChild) {
+            comment_list.removeChild(comment_list.firstChild);
+        }
+
+        let cmt_list = createComments(cmt_response.comments); 
+        for (let cmt of cmt_list) {
+            comment_list.appendChild(cmt);
+        }
+    }
+});

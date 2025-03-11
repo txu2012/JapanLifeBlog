@@ -5,6 +5,7 @@ const execute = require("./db_functions.js");
 const { json } = require("stream/consumers");
 const fs = require('fs');
 const SQL = require("./sql.json")
+var crypto = require('crypto');
 
 const app = express();
 const web_path = path.join(__dirname, "..");   
@@ -34,11 +35,11 @@ app.post('/api/user', (req, res) => {
                     console.log(`Error ${error}`);
                     res.status(500).json({message:"No user found."});
                 })
-                .then((value) => {
+                .then((values) => {
                     console.log('Test');
-                    if (value.length > 0) {
-                        if (value[0]['Password'] === cmds[0].params[1]) {
-                            res.status(201).json({message:"SUCCESS"});
+                    if (values.length > 0) {
+                        if (values[0]['Password'] === cmds[0].params[1]) {
+                            res.status(201).json({message:"SUCCESS", values});
                         }
                         else {
                             res.status(500).json({message:"Wrong username/password."});
@@ -115,7 +116,7 @@ app.post("/api/insert", function (req, res) {
                         execute(db, SQL[cmds[1].sql],[...cmds[1].params, value.row.PostId]);
                     }
                 });
-            res.status(201).json({message:"SUCCESS"});
+            res.status(201).json({message:"SUCCESS", values});
         }
         else{
             res.status (500).json({message:"Command Failed."});
@@ -152,6 +153,7 @@ const db = new sqlite3.Database('public/db/blogs.db', (err) => {
         execute(db, SQL['CreatePostsTable']);
         execute(db, SQL['CreatePostDetailsTable']);
         execute(db, SQL['CreateCommentsTable']);
+        execute(db, SQL['CreateSessionsTable'])
         execute(db, SQL['InsertUser'], ['2025-02-25', 'Admin', 'admin@gmail.com', 'admin', 'Admin']);
       } 
       catch (error) {
@@ -173,3 +175,10 @@ function dataUrlToFile(dataurl, filename) {
     From dataURI: "${dataurl}" 
     To file => "${outputFilepath}"`);
 }
+
+// For user sessions later on
+var generate_key = function() {
+    // 16 bytes is likely to be more than enough,
+    // but you may tweak it to your needs
+    return crypto.randomBytes(16).toString('base64');
+};

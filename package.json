@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.21.2",
     "http": "^0.0.1-security",
     "sqlite3": "^5.1.7"

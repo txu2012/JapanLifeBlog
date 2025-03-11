@@ -70,9 +70,14 @@ btnLogin.addEventListener('click', async function() {
     })
     .then((res) => res.json())
     .then((result) => {
+        console.log(result);
         if (result.message === 'SUCCESS') {
             alert('Login successful.');
-            window.location.href = '/web/Main.html'
+            
+            document.cookie = 'username=' + result.values[0]['UserName'];
+            document.cookie = 'userid=' + result.values[0]['UserId'];
+
+            window.location.href = '/web/Main.html';
         }
         else {
             alert(result.message);

@@ -115,8 +115,8 @@ app.post("/api/insert", function (req, res) {
                     if (cmds.length > 1) {
                         execute(db, SQL[cmds[1].sql],[...cmds[1].params, value.row.PostId]);
                     }
+                    res.status(201).json({message:"SUCCESS", value});
                 });
-            res.status(201).json({message:"SUCCESS", values});
         }
         else{
             res.status (500).json({message:"Command Failed."});

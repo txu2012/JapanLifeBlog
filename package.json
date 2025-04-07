@@ -11,7 +11,9 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "net": "^1.0.2",
     "sqlite3": "^5.1.7"
   }
 }
